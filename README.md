@@ -10,7 +10,7 @@ Model 1을 사용한 게시판 프로젝트<br>
 
 서버에서 사용할 프로젝트만 체크<br>
 
-Transaction<br>
+# Transaction
 - DB가 일괄적으로 처리해야 하는 작업단위<br>
 - 한 개의 Transaction 안에는 다수개 SQL이 포함될 수 있다<br>
 - Transaction 안의 모든 SQL이 성공할 때 그 작업이 성공한 것이다.<br>
