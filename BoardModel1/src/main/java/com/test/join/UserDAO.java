@@ -31,78 +31,75 @@ public class UserDAO
 	
 	public boolean checkDuplicate(String uid) {
 		conn = getConn();
-		String sql = "SELECT * FROM users WHERE userid = ?";
+		String sql = "SELECT * FROM users WHERE userid=?";
+		conn = getConn();
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, uid);
 			rs = pstmt.executeQuery();
-			if (rs.next()) {
-	            return false;
-	        } else {
-	        	return true;
-	        }
-		} catch(SQLException sqle) {
+			if(rs.next()) {
+				return false;
+			}else {
+				return true;
+			}
+		}catch(SQLException sqle) {
 			sqle.printStackTrace();
-		} finally {
+		}finally {
 			closeAll();
 		}
 		return false;
 	}
 	
-	
-	public boolean login(User user)
-	{
+	public boolean login(User user) {
 		String sql = "SELECT * FROM users WHERE userid=? AND userpwd=?";
 		conn = getConn();
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, user.getUid());
-			pstmt.setString(2, user.getPwd());
+			pstmt.setString(2,  user.getPwd());
 			rs = pstmt.executeQuery();
 			if(rs.next()) {
 				return true;
 			}
-		} catch(SQLException sqle) {
+		}catch(SQLException sqle) {
 			sqle.printStackTrace();
-		} finally {
+		}finally {
 			closeAll();
 		}
 		return false;
 	}
 	
-	public boolean add(User user) {
-        conn = getConn();
-        String sql = "INSERT INTO users (userid, userpwd) VALUES (?, ?)";
-        try {
-            pstmt = conn.prepareStatement(sql);
-            pstmt.setString(1, user.getUid());
-            pstmt.setString(2, user.getPwd()); 
-            int rowsInserted = pstmt.executeUpdate();
-            
-            return rowsInserted > 0;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace(); 
-            return false;
-        } finally {
-            closeAll();
-        }
-    }
-	
-	public List<User> getList() {
+
+	public boolean add(User u) {
+		String sql = "INSERT INTO users VALUES(?,?)";
 		conn = getConn();
 		try {
-			pstmt = conn.prepareStatement("SELECT * FROM users");
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, u.getUid());
+			pstmt.setString(2, u.getPwd());
+			int rows = pstmt.executeUpdate();
+			
+			return rows>0;
+		}catch(SQLException sqle) {
+			sqle.printStackTrace();
+		}finally {
+			closeAll();
+		}
+		return false;
+	}
+	
+	public List<User> getList()
+	{
+		String sql = "SELECT * FROM users";
+		conn = getConn();
+		try {
+			pstmt = conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			List<User> list = new ArrayList<>();
-			while(rs.next())
-			{
+			while(rs.next()) {
 				String userid = rs.getString("USERID");
 				String userpwd = rs.getString("USERPWD");
-				
-				User user = new User();
-				user.setUid(userid);
-				user.setPwd(userpwd);
-				list.add(user);
+				list.add(new User(userid, userpwd));
 			}
 			return list;
 		}catch(SQLException sqle) {
@@ -113,24 +110,20 @@ public class UserDAO
 		return null;
 	}
 	
-	public User getDetail(String uid)
-	{
-		User user = null;
+
+	public User getDetail(String uid) {
+		String sql = "SELECT * FROM users WHERE userid=?";
 		conn = getConn();
 		try {
-			pstmt = conn.prepareStatement("SELECT userid, userpwd FROM users WHERE userid = ?");
+			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, uid);
 			rs = pstmt.executeQuery();
-			while(rs.next())
-			{
-				uid = rs.getString("USERID");
+			
+			if(rs.next()) {
+				String userid = rs.getString("USERID");
 				String userpwd = rs.getString("USERPWD");
-				
-				user = new User();
-				user.setUid(uid);
-				user.setPwd(userpwd);
+				return new User(userid, userpwd);
 			}
-			return user;
 		}catch(SQLException sqle) {
 			sqle.printStackTrace();
 		}finally {
@@ -140,37 +133,133 @@ public class UserDAO
 	}
 	
 	public boolean updatePwd(User user) {
-	    conn = getConn();
-	    try {
-	        pstmt = conn.prepareStatement("UPDATE users SET userpwd = ? WHERE userid = ?");
-	        pstmt.setString(1, user.getPwd());
-	        pstmt.setString(2, user.getUid());
-	        int rowsUpdated = pstmt.executeUpdate();
-	        return rowsUpdated > 0; 
-	    } catch (SQLException sqle) {
-	        sqle.printStackTrace();
-	        return false;
-	    } finally {
-	        closeAll();
-	    }
-	}
-	
-	public boolean delete(String uid)
-	{
+		String sql = "UPDATE users SET userpwd=? WHERE userid=?";
 		conn = getConn();
 		try {
-            pstmt = conn.prepareStatement("DELETE FROM users WHERE userid = ?");
-            pstmt.setString(1, uid);
-            int rowsDeleted = pstmt.executeUpdate();
-            return rowsDeleted > 0;
-        } catch (SQLException sqle) {
-            sqle.printStackTrace(); 
-            return false;
-        } finally {
-            closeAll();
-        }
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, user.getPwd());
+			pstmt.setString(2, user.getUid());
+			int rows = pstmt.executeUpdate();
+			
+			return rows>0;
+		}catch(SQLException sqle) {
+			sqle.printStackTrace();
+		}finally {
+			closeAll();
+		}
+		return false;
+	}
+	
+	public boolean delete(String uid) {
+		String sql = "DELETE FROM users WHERE userid=?";
+		conn = getConn();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			pstmt.setString(1, uid);
+			int rows = pstmt.executeUpdate();
+			return rows>0;
+		}catch(SQLException sqle) {
+			sqle.printStackTrace();
+		}finally {
+			closeAll();
+		}
+		return false;
 	}
 
+	public boolean saveMember(MemberVO m) {
+		String sql = "INSERT INTO member(userid,pwd,gender,age,birth,intro) "
+				   + "VALUES(?,?,?,?,?,?)";
+		conn = getConn();
+		try {
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, m.getUid());
+			pstmt.setString(2,  m.getPwd());
+			pstmt.setString(3, m.getGender());
+			pstmt.setInt(4, m.getAge());
+			pstmt.setDate(5, m.getBirth());
+			pstmt.setString(6, m.getIntro());
+			
+			int mem_rows = pstmt.executeUpdate();
+
+			String[] hobbies = m.getHobby();
+			sql = "INSERT INTO hobby(userid, hobbycode) VALUES "
+				+ "( "
+				+ "    ?, "
+				+ "    (SELECT code FROM hobbycode WHERE hobby=?) "
+				+ ")";
+			pstmt = conn.prepareStatement(sql);
+			int hobby_rows = 0;
+			for(int i=0;i<hobbies.length;i++) {
+				pstmt.setString(1, m.getUid());
+				pstmt.setString(2, hobbies[i]);
+				hobby_rows += pstmt.executeUpdate();
+			}
+			return hobbies.length + 1 == mem_rows + hobby_rows;
+
+		}catch(SQLException sqle) {
+			sqle.printStackTrace();
+		}finally {
+			closeAll();
+		}
+		return false;
+	}
+	
+	public boolean saveMember2(MemberVO m) {
+		String sql = "INSERT INTO member(userid,pwd,gender,age,birth,intro) "
+				   + "VALUES(?,?,?,?,?,?)";
+		conn = getConn();
+		
+		try {
+			conn.setAutoCommit(false);
+			pstmt = conn.prepareStatement(sql);
+			
+			pstmt.setString(1, m.getUid());
+			pstmt.setString(2,  m.getPwd());
+			pstmt.setString(3, m.getGender());
+			pstmt.setInt(4, m.getAge());
+			pstmt.setDate(5, m.getBirth());
+			pstmt.setString(6, m.getIntro());
+			
+			int mem_rows = pstmt.executeUpdate();
+
+			String[] hobbies = m.getHobby();
+			sql = "INSERT INTO hobby(userid, hobbycode) VALUES "
+				+ "( "
+				+ "    ?, "
+				+ "    (SELECT code FROM hobbycode WHERE hobby=?) "
+				+ ")";
+			pstmt = conn.prepareStatement(sql);
+			int hobby_rows = 0;
+			for(int i=0;i<hobbies.length;i++) {
+				pstmt.setString(1, m.getUid());
+				pstmt.setString(2, hobbies[i]);
+				hobby_rows += pstmt.executeUpdate();
+			}
+			boolean saved = hobbies.length + 1 == mem_rows + hobby_rows;
+			if(saved) {
+				conn.commit();
+			}
+			return saved;
+
+		}catch(SQLException sqle) {
+			try {
+				conn.rollback();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			sqle.printStackTrace();
+		}finally {
+			try {
+				conn.setAutoCommit(true);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			closeAll();
+		}
+		return false;
+	}
+	
 	private void closeAll() {
 		try {
 			if(rs!=null) rs.close();
