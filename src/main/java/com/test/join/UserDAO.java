@@ -12,27 +12,32 @@ import java.util.Map;
 
 public class UserDAO 
 {
-	private Connection conn;
-	private PreparedStatement pstmt;
-	private ResultSet rs;
+	// 데이터베이스 연결 정보 (외부 설정 파일이나 환경 변수에서 읽어오는 것이 더 안전합니다)
+    private String driver = "oracle.jdbc.OracleDriver"; 
+    private String url = "jdbc:oracle:thin:@localhost:1521:xe"; 
+    private String dbid = "SCOTT"; 
+    private String dbpw = "TIGER";
+
+    private Connection conn;
+    private PreparedStatement pstmt;
+    private ResultSet rs;
+
+    // 데이터베이스 연결을 얻는 메서드 
+    private Connection getConn() {
+        try {
+            Class.forName(driver);
+            conn = DriverManager.getConnection(url, dbid, dbpw);
+            return conn;
+        } catch (Exception e) {
+            e.printStackTrace(); // 로그 출력 혹은 로깅 프레임워크 사용 권장
+            return null;
+        }
+    }
 	
-	private Connection getConn() 
-	{
-		try {
-			Class.forName("oracle.jdbc.OracleDriver");
-			conn = DriverManager.getConnection(
-	                "jdbc:oracle:thin:@localhost:1521:xe", "SCOTT", "TIGER");
-			return conn;
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
-		return null;
-	}
-	
+    // 아이디 중복 체크 
 	public boolean checkDuplicate(String uid) {
 		conn = getConn();
 		String sql = "SELECT * FROM users WHERE userid=?";
-		conn = getConn();
 		try {
 			pstmt = conn.prepareStatement(sql);
 			pstmt.setString(1, uid);
@@ -50,6 +55,7 @@ public class UserDAO
 		return false;
 	}
 	
+	// 로그인 처리
 	public boolean login(User user) {
 		String sql = "SELECT * FROM users WHERE userid=? AND userpwd=?";
 		conn = getConn();
@@ -68,8 +74,8 @@ public class UserDAO
 		}
 		return false;
 	}
-	
 
+	// 사용자 추가 (회원가입)
 	public boolean add(User u) {
 		String sql = "INSERT INTO users VALUES(?,?)";
 		conn = getConn();
@@ -78,7 +84,6 @@ public class UserDAO
 			pstmt.setString(1, u.getUid());
 			pstmt.setString(2, u.getPwd());
 			int rows = pstmt.executeUpdate();
-			
 			return rows>0;
 		}catch(SQLException sqle) {
 			sqle.printStackTrace();
@@ -88,6 +93,7 @@ public class UserDAO
 		return false;
 	}
 	
+	// 모든 사용자 목록 조회
 	public List<User> getList()
 	{
 		String sql = "SELECT * FROM users";
@@ -104,13 +110,13 @@ public class UserDAO
 			return list;
 		}catch(SQLException sqle) {
 			sqle.printStackTrace();
+			return null;
 		}finally {
 			closeAll();
 		}
-		return null;
 	}
 	
-
+	// 특정 사용자 정보 조회
 	public User getDetail(String uid) {
 		String sql = "SELECT * FROM users WHERE userid=?";
 		conn = getConn();
@@ -126,12 +132,14 @@ public class UserDAO
 			}
 		}catch(SQLException sqle) {
 			sqle.printStackTrace();
+			return null;
 		}finally {
 			closeAll();
 		}
 		return null;
 	}
 	
+	// 비밀번호 변경
 	public boolean updatePwd(User user) {
 		String sql = "UPDATE users SET userpwd=? WHERE userid=?";
 		conn = getConn();
@@ -140,16 +148,16 @@ public class UserDAO
 			pstmt.setString(1, user.getPwd());
 			pstmt.setString(2, user.getUid());
 			int rows = pstmt.executeUpdate();
-			
 			return rows>0;
 		}catch(SQLException sqle) {
 			sqle.printStackTrace();
+			return false;
 		}finally {
 			closeAll();
 		}
-		return false;
 	}
 	
+	// 사용자 삭제
 	public boolean delete(String uid) {
 		String sql = "DELETE FROM users WHERE userid=?";
 		conn = getConn();
@@ -160,106 +168,65 @@ public class UserDAO
 			return rows>0;
 		}catch(SQLException sqle) {
 			sqle.printStackTrace();
+			return false;
 		}finally {
 			closeAll();
 		}
-		return false;
 	}
 
 	public boolean saveMember(MemberVO m) {
-		String sql = "INSERT INTO member(userid,pwd,gender,age,birth,intro) "
-				   + "VALUES(?,?,?,?,?,?)";
-		conn = getConn();
-		try {
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, m.getUid());
-			pstmt.setString(2,  m.getPwd());
-			pstmt.setString(3, m.getGender());
-			pstmt.setInt(4, m.getAge());
-			pstmt.setDate(5, m.getBirth());
-			pstmt.setString(6, m.getIntro());
-			
-			int mem_rows = pstmt.executeUpdate();
+	    String sqlMember = "INSERT INTO member(userid, pwd, gender, age, birth, intro) VALUES (?, ?, ?, ?, ?, ?)";
+	    String sqlHobby = "INSERT INTO hobby(userid, hobbycode) VALUES (?, (SELECT code FROM hobbycode WHERE hobby=?))";
 
-			String[] hobbies = m.getHobby();
-			sql = "INSERT INTO hobby(userid, hobbycode) VALUES "
-				+ "( "
-				+ "    ?, "
-				+ "    (SELECT code FROM hobbycode WHERE hobby=?) "
-				+ ")";
-			pstmt = conn.prepareStatement(sql);
-			int hobby_rows = 0;
-			for(int i=0;i<hobbies.length;i++) {
-				pstmt.setString(1, m.getUid());
-				pstmt.setString(2, hobbies[i]);
-				hobby_rows += pstmt.executeUpdate();
-			}
-			return hobbies.length + 1 == mem_rows + hobby_rows;
+	    conn = getConn();
+	    try {
+	        conn.setAutoCommit(false); // Start transaction
 
-		}catch(SQLException sqle) {
-			sqle.printStackTrace();
-		}finally {
-			closeAll();
-		}
-		return false;
+	        pstmt = conn.prepareStatement(sqlMember);
+	        pstmt = conn.prepareStatement(sqlMember);
+
+	        pstmt.setString(1, m.getUid());       // Set userid
+	        pstmt.setString(2, m.getPwd());      // Set password (ensure it's hashed and salted)
+	        pstmt.setString(3, m.getGender());    // Set gender
+	        pstmt.setInt(4, m.getAge());          // Set age
+	        pstmt.setDate(5, m.getBirth());       // Set birth date
+	        pstmt.setString(6, m.getIntro());     // Set introduction
+
+	        int memRows = pstmt.executeUpdate(); 
+
+	        pstmt = conn.prepareStatement(sqlHobby);
+	        int hobbyRows = 0;
+	        for (String hobby : m.getHobby()) {
+	            pstmt.setString(1, m.getUid());
+	            pstmt.setString(2, hobby);
+	            hobbyRows += pstmt.executeUpdate();
+	        }
+
+	        if (m.getHobby().length + 1 == memRows + hobbyRows) {
+	            conn.commit(); // Commit transaction on success
+	            return true;
+	        } else {
+	            conn.rollback(); // Rollback on failure
+	            // Log error or throw exception with appropriate message
+	            return false;
+	        }
+	    } catch (SQLException sqle) {
+	        try {
+	            conn.rollback(); // Rollback on exception
+	        } catch (SQLException e) {
+	            e.printStackTrace();
+	        }
+	        return false;
+	    } finally {
+	        try {
+	            conn.setAutoCommit(true); // Reset auto-commit
+	        } catch (SQLException e) {
+	        	e.printStackTrace();
+	        }
+	        closeAll();
+	    }
 	}
-	
-	public boolean saveMember2(MemberVO m) {
-		String sql = "INSERT INTO member(userid,pwd,gender,age,birth,intro) "
-				   + "VALUES(?,?,?,?,?,?)";
-		conn = getConn();
-		
-		try {
-			conn.setAutoCommit(false);
-			pstmt = conn.prepareStatement(sql);
-			
-			pstmt.setString(1, m.getUid());
-			pstmt.setString(2,  m.getPwd());
-			pstmt.setString(3, m.getGender());
-			pstmt.setInt(4, m.getAge());
-			pstmt.setDate(5, m.getBirth());
-			pstmt.setString(6, m.getIntro());
-			
-			int mem_rows = pstmt.executeUpdate();
 
-			String[] hobbies = m.getHobby();
-			sql = "INSERT INTO hobby(userid, hobbycode) VALUES "
-				+ "( "
-				+ "    ?, "
-				+ "    (SELECT code FROM hobbycode WHERE hobby=?) "
-				+ ")";
-			pstmt = conn.prepareStatement(sql);
-			int hobby_rows = 0;
-			for(int i=0;i<hobbies.length;i++) {
-				pstmt.setString(1, m.getUid());
-				pstmt.setString(2, hobbies[i]);
-				hobby_rows += pstmt.executeUpdate();
-			}
-			boolean saved = hobbies.length + 1 == mem_rows + hobby_rows;
-			if(saved) {
-				conn.commit();
-			}
-			return saved;
-
-		}catch(SQLException sqle) {
-			try {
-				conn.rollback();
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			sqle.printStackTrace();
-		}finally {
-			try {
-				conn.setAutoCommit(true);
-			} catch (SQLException e) {
-				e.printStackTrace();
-			}
-			closeAll();
-		}
-		return false;
-	}
-	
 	private void closeAll() {
 		try {
 			if(rs!=null) rs.close();

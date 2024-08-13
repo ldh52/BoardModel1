@@ -64,14 +64,12 @@ public class MemberVO
 	}
 	public void setBirth(String birth) {
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-		java.util.Date uDate;
-		try {
-			uDate = sdf.parse(birth);
-			java.sql.Date sDate = new java.sql.Date(uDate.getTime());
-			this.birth = sDate;
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+        try {
+            java.util.Date uDate = sdf.parse(birth);
+            this.birth = new java.sql.Date(uDate.getTime());
+        } catch (ParseException e) {
+        	e.printStackTrace();
+        }
 	}
 	public String getIntro() {
 		return intro;
