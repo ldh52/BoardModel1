@@ -4,6 +4,7 @@
 <head>
 <meta charset="UTF-8">
 <title>로그인 폼</title>
+
 <style type="text/css">
    #main { width:fit-content; margin:0.5em auto; padding:1em;}
    form { border:1px solid black; padding:0.5em;}
@@ -11,15 +12,17 @@
    div:last-child { margin-top:0.3em; text-align:center; }
    label { display:inline-block; width:3em; }
 </style>
+
 <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
 <script type="text/javascript">
    function login() {
-      var uid = document.querySelector("#uid").value;   // Document Object Model(DOM)
-      var pwd = document.querySelector("#pwd").value;
+   	  var uid = $("#uid").val();   // jQuery 사용 
+      var pwd = $("#pwd").val();
+	   
       if(uid=="" || pwd=="") {
          alert('아이디, 암호를 확인해주세요');
          return false;
-      } // /* */
+      } 
       
       var obj = {};
       obj.cmd = 'login';
