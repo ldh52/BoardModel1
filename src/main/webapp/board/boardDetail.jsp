@@ -1,15 +1,19 @@
 <%@page import="com.test.model1board.Board"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
+
 <jsp:useBean id="dao" class="com.test.model1board.BoardDAO"/>
+
 <%
    int bnum = Integer.parseInt(request.getParameter("bnum"));
    Board b = dao.getBoard(bnum); 
 %>
+
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>게시글 상세보기</title>
+
 <style type="text/css">
 main { width:fit-content; margin:0.5em auto; }
 main>h3 { width:fit-content; margin:0.2em auto; border-bottom:3px double black;}
@@ -18,6 +22,7 @@ th {background-color:#eef; text-align:right; border-right:3px double black;}
 th,td { padding:0.2em 0.5em; border-bottom:1px dashed black; }
 tr:last-child>td { width:20em; height:5em; overflow: auto;}
 </style>
+
 </head>
 <body>
 <main>
