@@ -18,3 +18,9 @@ Model 1을 사용한 게시판 프로젝트<br>
 - 오류 없이 Transaction이 성공하면 모든 SQL 문장의 결과를 영구적으로 반영해야 한다.<br>
 - commit(): Transaction이 성공했을 때 호출Transaction
 - rollback(): Transaction안의 한 개의 SQL이라도 실패한 경우에 모든 SQL을 취소한다.<br>
+<br>
+SQL Developer에서는 개발자가 명시적으로 commit(), rollback() 명령해 주어야 한다.<br>
+Java(JDBC)에서는 자동으로 한 문장마다 commit()이 호출된다.<br>
+<br>
+
+
