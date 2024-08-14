@@ -35,7 +35,7 @@ https://repo.maven.apache.org/maven2/jakarta/servlet/jsp/jstl/jakarta.servlet.js
 https://repo.maven.apache.org/maven2/org/glassfish/web/jakarta.servlet.jsp.jstl/2.0.0/jakarta.servlet.jsp.jstl-2.0.0.jar<br><br>
 
 # 모델1 게시판 프로젝트 -> 모델2 변환
-- JSP에서 EL,JSP 사용<br>
+- JSP에서 EL, JSTL 사용<br>
 - Servlet 추가<br>
 - Service 추가<br>
 - JSP 고쳐서 사용<br>
