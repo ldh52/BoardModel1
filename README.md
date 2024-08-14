@@ -23,4 +23,10 @@ SQL Developer에서는 개발자가 명시적으로 commit(), rollback() 명령�
 Java(JDBC)에서는 자동으로 한 문장마다 commit()이 호출된다.<br>
 <br>
 
+웹페이지를 쉽게 태그만 사용하여 작성하는 기술<br>
+HTML이 사용되는 곳에서 Java 코드를 배제한다<br>
+# EL(Expression Language)
+
+
+# JSTL(JSP Standard Tag Library)
 
