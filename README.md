@@ -29,4 +29,7 @@ HTML이 사용되는 곳에서 Java 코드를 배제한다<br>
 
 
 # JSTL(JSP Standard Tag Library)
+https://repo.maven.apache.org/maven2/jakarta/servlet/jsp/jstl/jakarta.servlet.jsp.jstl-api/2.0.0/jakarta.servlet.jsp.jstl-api-2.0.0.jar
+<br>
+https://repo.maven.apache.org/maven2/org/glassfish/web/jakarta.servlet.jsp.jstl/2.0.0/jakarta.servlet.jsp.jstl-2.0.0.jar<br>
 
