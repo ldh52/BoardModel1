@@ -26,7 +26,7 @@ Java(JDBC)에서는 자동으로 한 문장마다 commit()이 호출된다.<br>
 웹페이지를 쉽게 태그만 사용하여 작성하는 기술<br>
 HTML이 사용되는 곳에서 Java 코드를 배제한다<br>
 # EL(Expression Language)
-
+<br>
 
 # JSTL(JSP Standard Tag Library)
 https://repo.maven.apache.org/maven2/jakarta/servlet/jsp/jstl/jakarta.servlet.jsp.jstl-api/2.0.0/jakarta.servlet.jsp.jstl-api-2.0.0.jar
