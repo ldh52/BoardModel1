@@ -24,17 +24,17 @@ Java(JDBC)에서는 자동으로 한 문장마다 commit()이 호출된다.<br>
 <br>
 
 웹페이지를 쉽게 태그만 사용하여 작성하는 기술<br>
-HTML이 사용되는 곳에서 Java 코드를 배제한다<br>
+HTML이 사용되는 곳에서 Java 코드를 배제한다<br><br>
 # EL(Expression Language)
 <br>
-게시글 상세보기 페이지를 EL을 사용하여 변경해보세요.
+게시글 상세보기 페이지를 EL을 사용하여 변경해보세요.<br>
 
 # JSTL(JSP Standard Tag Library)
 https://repo.maven.apache.org/maven2/jakarta/servlet/jsp/jstl/jakarta.servlet.jsp.jstl-api/2.0.0/jakarta.servlet.jsp.jstl-api-2.0.0.jar
 <br>
-https://repo.maven.apache.org/maven2/org/glassfish/web/jakarta.servlet.jsp.jstl/2.0.0/jakarta.servlet.jsp.jstl-2.0.0.jar<br>
+https://repo.maven.apache.org/maven2/org/glassfish/web/jakarta.servlet.jsp.jstl/2.0.0/jakarta.servlet.jsp.jstl-2.0.0.jar<br><br>
 
 # 모델1 게시판 프로젝트 -> 모델2 변환
-- JSP에서 EL,JSP 사용
+- JSP에서 EL,JSP 사용<br>
 - 
 
