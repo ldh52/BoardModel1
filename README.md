@@ -47,96 +47,25 @@ https://repo.maven.apache.org/maven2/org/glassfish/web/jakarta.servlet.jsp.jstl/
 - Model1BookCart_CodeList 참조<br>
 
 
-# 모델 1 게시판 코드 리스트
-Model 1 아키텍처를 기반으로 하는 게시판 프로젝트의 Java 코드와 JSP 코드 목록, 그리고 각 파일의 주요 기능을 간략하게 설명합니다. <br>
+# 장바구니 모델1 (Java, Servlet, JSP) 코드 리스트 요약
 
-## Java 코드
-+ UserVO<br>
-사용자 정보를 저장하는 VO (Value Object) 또는 DTO (Data Transfer Object) 클래스입니다.<br>
-uid, pwd, name, email, regdate 등의 필드와 getter/setter 메서드를 포함합니다.<br>
+## Java 클래스
++ BookVO.java: 책 정보를 저장하는 Value Object 클래스. equals 및 hashCode 메서드를 구현하여 객체 비교를 가능하게 합니다.<br>
++ BookCart.java: 장바구니 기능을 구현하는 클래스. 책 추가, 삭제, 수량 변경, 총 가격 계산 등의 기능을 제공합니다.<br>
++ BookDAO.java: 데이터베이스와의 상호작용을 담당하는 데이터 액세스 객체(DAO). 책 정보 조회, 삽입, 수정, 삭제 기능을 제공합니다.<br>
++ CartItem.java: 장바구니에 담긴 개별 상품 항목을 나타내는 클래스. 책 정보와 구매 수량을 저장합니다.<br>
 
-+ UserDAO<br>
-사용자 관련 데이터베이스 작업을 처리하는 DAO (Data Access Object) 클래스입니다.<br>
-login, add, checkDuplicate, getList, getDetail, updatePwd, delete 등의 메서드를 포함합니다.<br>
-데이터베이스 연결 및 쿼리 실행, 결과 처리 등의 기능을 수행합니다.<br>
+## Servlet
++ BookDeleteServlet.java: 책 삭제 요청을 처리하는 서블릿. BookDAO를 사용하여 데이터베이스에서 책 정보를 삭제합니다.<br>
 
-+ MemberVO<br>
-회원 가입 시 입력받은 정보를 저장하는 VO 또는 DTO 클래스입니다.<br>
-uid, pwd, gender, hobby, history, age, birth, intro 등의 필드와 getter/setter 메서드를 포함합니다.<br>
-문자열 형식의 데이터를 적절한 타입으로 변환하는 기능도 포함합니다.<br>
-
-+ Board<br>
-게시글 정보를 저장하는 VO 또는 DTO 클래스입니다.<br>
-bnum, title, author, contents, rdate, hit 등의 필드와 getter/setter 메서드를 포함합니다.<br>
-
-+ BoardDAO<br>
-게시글 관련 데이터베이스 작업을 처리하는 DAO 클래스입니다.<br>
-addBoard, getBoard, getBoardList, increaseHit, updateBoard, deleteBoard, getTotalBoardCount, getBoardList(int, int), searchBoards, getSearchBoardCount 등의 메서드를 포함합니다.<br>
-데이터베이스 연결 및 쿼리 실행, 결과 처리 등의 기능을 수행합니다.<br>
-
-## JSP 코드
-
-+ index.jsp<br>
-게시판 프로젝트의 메인 페이지입니다.<br>
-게시판 제목, 로그인/로그아웃, 게시글 입력, 게시글 목록 링크 등을 포함합니다.<br>
-로그인 상태에 따라 표시되는 링크를 동적으로 제어합니다.<br>
-다른 JSP 페이지를 포함하여 실제 내용을 표시합니다. (<jsp:include page="${viewPage}" />)<br>
-
-+ boardList.jsp<br>
-게시글 목록을 표시하는 페이지입니다.<br>
-BoardDAO를 사용하여 게시글 목록을 조회하고 테이블 형태로 출력합니다.<br>
-각 게시글의 제목을 클릭하면 boardDetail.jsp로 이동합니다.<br>
-로그인한 사용자에게는 게시글 수정 및 삭제 링크를 표시합니다.<br>
-페이징 처리, 검색 기능 등을 추가하여 개선할 수 있습니다.<br>
-
-+ boardDetail.jsp<br>
-특정 게시글의 상세 내용을 표시하는 페이지입니다.<br>
-BoardDAO를 사용하여 게시글 정보를 조회하고 출력합니다.<br>
-조회수를 증가시키는 로직을 포함합니다.<br>
-로그인한 사용자에게는 게시글 수정 및 삭제 버튼을 표시합니다.<br>
-
-+ boardAddForm.jsp<br>
-게시글 작성 폼을 제공하는 페이지입니다.<br>
-폼 제출 시 게시글 정보를 데이터베이스에 저장하고 목록 페이지로 이동합니다.<br>
-사용자 입력값 검증 로직을 포함해야 합니다.<br>
-
-+ boardEditForm.jsp<br>
-게시글 수정 폼을 제공하는 페이지입니다.<br>
-특정 게시글 번호에 해당하는 게시글 정보를 조회하여 수정 폼에 미리 채워 넣습니다.<br>
-폼 제출 시 게시글 정보를 데이터베이스에 업데이트하고 상세 페이지로 이동합니다.<br>
-사용자 인증 및 권한 검증, 입력값 검증 로직을 포함해야 합니다.<br>
-
-+ deleteBoard.jsp<br>
-삭제 확인 대화상자를 표시하고, 확인 시 AJAX 요청을 통해 deleteBoardProc.jsp에 게시글 번호를 전달합니다.<br>
-deleteBoardProc.jsp에서 반환된 JSON 응답을 처리하여 삭제 성공/실패 메시지를 표시하고 페이지를 새로고침하거나 이전 페이지로 이동합니다.<br>
-
-+ deleteBoardProc.jsp<br>
-실제 게시글 삭제 로직을 처리하고 JSON 형식으로 결과를 반환합니다.<br>
-사용자 인증 및 권한 검증 로직을 포함해야 합니다.<br>
-
-+ loginForm.jsp<br>
-로그인 폼을 제공하는 페이지입니다.<br>
-폼 제출 시 사용자 정보를 데이터베이스에서 검증하고, 로그인 성공 시 세션에 사용자 정보를 저장하고 메인 페이지로 이동합니다.<br>
-입력값 검증 로직을 포함해야 합니다.<br>
-
-+ userLogin.jsp<br>
-실제 로그인 처리 로직을 수행하고 JSON 형식으로 결과를 반환합니다.<br>
-데이터베이스에서 사용자 정보를 조회하고, 입력된 아이디와 비밀번호가 일치하는지 확인합니다.<br>
-로그인 성공 시 세션에 사용자 정보를 저장합니다.<br>
-
-+ logout.jsp<br>
-세션을 무효화하고 메인 페이지로 이동합니다.<br>
-
-+ joinForm.jsp<br>
-회원 가입 폼을 제공하는 페이지입니다.<br>
-폼 제출 시 사용자 정보를 데이터베이스에 저장하고 메인 페이지로 이동합니다.<br>
-아이디 중복 검사, 비밀번호 유효성 검사, 입력값 검증 로직을 포함해야 합니다.<br>
-
-+ formProc.jsp<br>
-실제 회원 가입 처리 로직을 수행하고 JSON 형식으로 결과를 반환합니다.<br>
-데이터베이스에 사용자 정보를 저장합니다.<br>
-
-+ checkDuplicate.jsp<br>
-입력된 아이디의 중복 여부를 확인하고 JSON 형식으로 결과를 반환합니다.<br>
+## JSP 페이지
++ bookIndex.jsp: 도서 관리 시스템의 메인 페이지. "도서 목록" 메뉴를 통해 bookList.jsp 페이지로 이동할 수 있습니다.<br>
++ bookInsert.jsp: 새로운 책 정보를 등록하는 페이지. 폼을 통해 사용자 입력을 받고, BookDAO를 사용하여 데이터베이스에 책 정보를 삽입합니다.<br>
++ bookList.jsp: 데이터베이스에서 조회한 도서 목록을 표 형태로 보여주는 페이지. 각 도서 항목에는 상세 정보 페이지로 이동하는 링크가 포함됩니다.<br>
++ bookDetail.jsp: 특정 책의 상세 정보를 보여주는 페이지. BookDAO를 사용하여 데이터베이스에서 책 정보를 조회하고, 사용자가 "장바구니에 담기" 버튼을 클릭하면 해당 책을 장바구니에 추가합니다.<br>
++ showCart.jsp: 사용자의 장바구니에 담긴 상품 목록을 표 형태로 보여주는 페이지. 각 상품의 정보와 총 가격을 표시하고, 상품 수량 변경 및 삭제 기능을 제공합니다.<br>
++ cartAdd.jsp: AJAX 요청을 처리하여 장바구니에 상품을 추가하는 페이지. (Model 2 아키텍처에서는 CartAddServlet으로 대체될 수 있습니다.)<br>
++ updateQty.jsp: AJAX 요청을 처리하여 장바구니 아이템의 수량을 변경하는 페이지. (Model 2 아키텍처에서는 CartUpdateServlet으로 대체될 수 있습니다.)<br>
++ order.jsp: 장바구니에 담긴 상품을 주문하는 페이지. 사용자 정보, 배송 정보, 결제 정보 입력 및 주문 처리 로직을 포함합니다.<br>
 
 
