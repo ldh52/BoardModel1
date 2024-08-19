@@ -38,25 +38,25 @@ https://repo.maven.apache.org/maven2/org/glassfish/web/jakarta.servlet.jsp.jstl/
 Model 1 아키텍처를 기반으로 하는 게시판 프로젝트의 Java 코드와 JSP 코드 목록, 그리고 각 파일의 주요 기능을 간략하게 설명합니다. <br>
 
 ## Java 코드
-+ com.test.join.UserVO<br>
++ UserVO<br>
 사용자 정보를 저장하는 VO (Value Object) 또는 DTO (Data Transfer Object) 클래스입니다.<br>
 uid, pwd, name, email, regdate 등의 필드와 getter/setter 메서드를 포함합니다.<br>
 
-+ com.test.join.UserDAO<br>
++ UserDAO<br>
 사용자 관련 데이터베이스 작업을 처리하는 DAO (Data Access Object) 클래스입니다.<br>
 login, add, checkDuplicate, getList, getDetail, updatePwd, delete 등의 메서드를 포함합니다.<br>
 데이터베이스 연결 및 쿼리 실행, 결과 처리 등의 기능을 수행합니다.<br>
 
-+ com.test.join.MemberVO<br>
++ MemberVO<br>
 회원 가입 시 입력받은 정보를 저장하는 VO 또는 DTO 클래스입니다.<br>
 uid, pwd, gender, hobby, history, age, birth, intro 등의 필드와 getter/setter 메서드를 포함합니다.<br>
 문자열 형식의 데이터를 적절한 타입으로 변환하는 기능도 포함합니다.<br>
 
-+ com.test.model1board.Board<br>
++ Board<br>
 게시글 정보를 저장하는 VO 또는 DTO 클래스입니다.<br>
 bnum, title, author, contents, rdate, hit 등의 필드와 getter/setter 메서드를 포함합니다.<br>
 
-+ com.test.model1board.BoardDAO<br>
++ BoardDAO<br>
 게시글 관련 데이터베이스 작업을 처리하는 DAO 클래스입니다.<br>
 addBoard, getBoard, getBoardList, increaseHit, updateBoard, deleteBoard, getTotalBoardCount, getBoardList(int, int), searchBoards, getSearchBoardCount 등의 메서드를 포함합니다.<br>
 데이터베이스 연결 및 쿼리 실행, 결과 처리 등의 기능을 수행합니다.<br>
