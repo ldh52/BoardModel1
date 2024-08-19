@@ -34,7 +34,7 @@ https://repo.maven.apache.org/maven2/jakarta/servlet/jsp/jstl/jakarta.servlet.js
 <br>
 https://repo.maven.apache.org/maven2/org/glassfish/web/jakarta.servlet.jsp.jstl/2.0.0/jakarta.servlet.jsp.jstl-2.0.0.jar<br><br>
 
-# 도서구매 사이트(장바구니)
+# 도서구매 사이트(장바구니); Model1BookCart
 - book 테이블(no, title, author, publisher, pubdate, pages, price, cover)
 - book 테이블에 10권 분량의 도서 정보를 저장한다(SQL Developer에서 수동으로 도서정보 추가)
 - 도서의 주제는 아래의 항목 참조
