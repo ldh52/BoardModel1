@@ -44,17 +44,3 @@ https://repo.maven.apache.org/maven2/org/glassfish/web/jakarta.servlet.jsp.jstl/
 - 상세보기 화면에서 구매 수량을 입력하고 [장바구니에 담기] 클릭 > "장바구니에 담기 성공"
 - 모델1
 
-# Java
-- BookVO.java
-- BookDAO.java
-- CartVO.java
-- BookCart.java
-- BookDeleteServlet.java
-- CartDAO.java
-- CartItem.java
-
-# JSP
-- bookDelete, bookDetail, bookindex, bookinsert, booklist, bookUpdate, cart, cartADD, order, showCart, updateQty
-
-# jsp/img
-
