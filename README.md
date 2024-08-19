@@ -9,6 +9,7 @@ JSP:useBean 사용하여 자바 객체 생성<br>
 Model 1을 사용한 게시판 프로젝트<br>
 
 서버에서 사용할 프로젝트만 체크<br>
+BoardModel1_CodeList 참조<br>
 
 # Transaction
 - DB가 일괄적으로 처리해야 하는 작업단위<br>
@@ -43,4 +44,5 @@ https://repo.maven.apache.org/maven2/org/glassfish/web/jakarta.servlet.jsp.jstl/
 - bookIndex.jsp 페이지에서 [도서목록] 메뉴 클릭 > 목록 페이지 표시 > 도서 아이템 클릭 > 상세보기 페이지 표시
 - 상세보기 화면에서 구매 수량을 입력하고 [장바구니에 담기] 클릭 > "장바구니에 담기 성공"
 - 모델1
+- Model1BookCart_CodeList 참조
 
